@@ -35,6 +35,8 @@ import org.apache.hadoop.yarn.conf.YarnConfiguration;
 
 import com.datatorrent.api.*;
 import com.datatorrent.api.Attribute.AttributeMap.DefaultAttributeMap;
+import com.datatorrent.api.DAG.StreamLogger;
+import com.datatorrent.api.DAG.StreamMeta;
 import com.datatorrent.api.Operator.InputPort;
 import com.datatorrent.api.Operator.OutputPort;
 import com.datatorrent.api.Operator.Unifier;
@@ -385,7 +387,8 @@ public class LogicalPlan implements Serializable, DAG
     private final List<InputPortMeta> sinks = new ArrayList<InputPortMeta>();
     private OutputPortMeta source;
     private final String id;
-
+    private StreamLogger<?> streamLogger;
+    
     private StreamMeta(String id)
     {
       this.id = id;
@@ -453,6 +456,11 @@ public class LogicalPlan implements Serializable, DAG
       return this;
     }
 
+    public StreamMeta enableLogger(StreamLogger<?> streamLogger){
+      this.streamLogger = streamLogger;
+      return this;
+    }
+    
     public void remove() {
       for (InputPortMeta ipm : this.sinks) {
         ipm.getOperatorWrapper().inputStreams.remove(ipm);

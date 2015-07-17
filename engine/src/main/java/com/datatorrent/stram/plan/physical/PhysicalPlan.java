@@ -186,6 +186,7 @@ public class PhysicalPlan implements Serializable
 
     /**
      * Operators that form a parallel partition
+     * bright: all the directly downstream parallel partition operators
      */
     private Set<OperatorMeta> parallelPartitions = Sets.newHashSet();
 
@@ -289,7 +290,14 @@ public class PhysicalPlan implements Serializable
   }
 
   /**
-   *
+   * bright: 
+   *   - find the first node(s)( the source is null ) or the node which upstream already inside logicalToPTOperator, 
+   * add then to logicalToPTOperator and init the partition, see addLogicalOperator().
+   *   - assgin the physical node into container: get the a container; assgin to this container, 
+   * and assign all the nodes with same container to this container
+   *   - for each operator, add init checkpoint
+   *   - ask PlanContext(StreamingContainerManager) to deploy the operators
+   *   
    * @param dag
    * @param ctx
    */
@@ -1277,6 +1285,7 @@ public class PhysicalPlan implements Serializable
     String host = pnodes.logicalOperator.getValue(OperatorContext.LOCALITY_HOST);
     localityPrefs.add(pnodes, host);
 
+    //bright: the directly upstream parallel partition node.
     PMapping upstreamPartitioned = null;
 
     for (Map.Entry<LogicalPlan.InputPortMeta, StreamMeta> e : om.getInputStreams().entrySet()) {
@@ -1290,6 +1299,7 @@ public class PhysicalPlan implements Serializable
             throw new AssertionError(msg);
           }
         }
+        //bright: means the directly downstream parallel partition operators will be added
         m.parallelPartitions.add(pnodes.logicalOperator);
         pnodes.parallelPartitions = m.parallelPartitions;
         upstreamPartitioned = m;

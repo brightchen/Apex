@@ -106,7 +106,28 @@ public interface DAG extends DAGContext, Serializable
 
     public StreamMeta addSink(Operator.InputPort<?> port);
 
+    /**
+     * add interface for stream logger.
+     * @param streamLogger the stream logger to log the tuples
+     * @return the StreamMeta itself
+     */
+    StreamMeta enableLogger(StreamLogger<?> streamLogger);
   }
+
+  /**
+   * StreamLogger interface.
+   *
+   * @param <T> type for the tuple
+   */
+  public interface StreamLogger<T> {
+    /**
+     * log a tuple.
+     * maybe provide another interface to log a bunch of tuple at one.
+     * @param tuple the tuple to be logged
+     */
+    void log(T tuple);
+  }
+
 
   /**
    * Operator meta object.
