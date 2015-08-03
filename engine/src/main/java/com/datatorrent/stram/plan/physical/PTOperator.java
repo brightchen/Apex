@@ -33,7 +33,8 @@ import com.datatorrent.api.Operator.InputPort;
 import com.datatorrent.api.Partitioner.PartitionKeys;
 import com.datatorrent.api.StatsListener;
 import com.datatorrent.api.annotation.Stateless;
-
+import com.datatorrent.common.util.debug.PartitionLogger;
+import com.datatorrent.common.util.debug.StackTracer;
 import com.datatorrent.stram.Journal.Recoverable;
 import com.datatorrent.stram.api.Checkpoint;
 import com.datatorrent.stram.api.StreamingContainerUmbilicalProtocol;
@@ -91,10 +92,12 @@ public class PTOperator implements java.io.Serializable
     {
       this.logicalStream = logicalStream;
       this.target = target;
+      StackTracer.logStack(PartitionLogger.logger);
       this.partitions = partitions;
       this.source = source;
       this.portName = portName;
       this.source.sinks.add(this);
+      
     }
 
     /**

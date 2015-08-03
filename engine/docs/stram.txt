@@ -1,0 +1,14 @@
+============================PTInput() Call Stack========================================
+at com.datatorrent.stram.plan.physical.PTOperator$PTInput.<init>(PTOperator.java:95)
+	at com.datatorrent.stram.plan.physical.StreamMapping.setInput(StreamMapping.java:349)
+	at com.datatorrent.stram.plan.physical.StreamMapping.redoMapping(StreamMapping.java:322)
+	at com.datatorrent.stram.plan.physical.StreamMapping.setSources(StreamMapping.java:93)
+	at com.datatorrent.stram.plan.physical.PhysicalPlan.updateStreamMappings(PhysicalPlan.java:847)
+	at com.datatorrent.stram.plan.physical.PhysicalPlan.addLogicalOperator(PhysicalPlan.java:1316)
+	at com.datatorrent.stram.plan.physical.PhysicalPlan.<init>(PhysicalPlan.java:329)
+	at com.datatorrent.stram.StreamingContainerManager.<init>(StreamingContainerManager.java:330)
+	at com.datatorrent.stram.StreamingContainerManager.<init>(StreamingContainerManager.java:318)
+	at com.datatorrent.stram.StramLocalCluster.<init>(StramLocalCluster.java:303)
+	at com.datatorrent.stram.LocalModeImpl.getController(LocalModeImpl.java:64)
+	at cg.dt.malharlib.PartitionAppTester.test(PartitionAppTester.java:42)
+============================PTInput() Call Stack========================================

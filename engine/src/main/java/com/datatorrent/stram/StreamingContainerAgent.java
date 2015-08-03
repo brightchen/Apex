@@ -35,7 +35,7 @@ import com.datatorrent.api.Operator.ProcessingMode;
 import com.datatorrent.api.StorageAgent;
 import com.datatorrent.api.StreamCodec;
 import com.datatorrent.api.annotation.Stateless;
-
+import com.datatorrent.common.util.debug.PartitionLogger;
 import com.datatorrent.stram.api.Checkpoint;
 import com.datatorrent.stram.api.OperatorDeployInfo;
 import com.datatorrent.stram.api.OperatorDeployInfo.InputDeployInfo;
@@ -238,6 +238,7 @@ public class StreamingContainerAgent {
         inputInfo.sourceNodeId = sourceOutput.source.getId();
         inputInfo.sourcePortName = sourceOutput.portName;
         if (in.partitions != null && in.partitions.mask != 0) {
+          PartitionLogger.logger.info("set partition info from {} to {}", in.getClass(), inputInfo.getClass());
           inputInfo.partitionMask = in.partitions.mask;
           inputInfo.partitionKeys = in.partitions.partitions;
         }

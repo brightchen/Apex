@@ -35,6 +35,8 @@ import com.datatorrent.api.Partitioner.PartitionKeys;
 import com.datatorrent.api.StreamCodec;
 
 import com.datatorrent.common.util.Pair;
+import com.datatorrent.common.util.debug.PartitionLogger;
+import com.datatorrent.common.util.debug.StackTracer;
 import com.datatorrent.stram.StreamingContainerAgent;
 import com.datatorrent.stram.plan.logical.LogicalPlan;
 import com.datatorrent.stram.plan.logical.LogicalPlan.InputPortMeta;
@@ -353,6 +355,8 @@ public class StreamMapping implements java.io.Serializable
   public static void addInput(PTOperator target, PTOutput upstreamOut, PartitionKeys pks)
   {
     StreamMeta lStreamMeta = upstreamOut.logicalStream;
+    PartitionLogger.logger.info("assign Partition to PTInput while create PTInput.");
+    StackTracer.logStack(PartitionLogger.logger);
     PTInput input = new PTInput("<merge#" + lStreamMeta.getSource().getPortName() + ">", lStreamMeta, target, pks, upstreamOut);
     target.inputs.add(input);
   }
