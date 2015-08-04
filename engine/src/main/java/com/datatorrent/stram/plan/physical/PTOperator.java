@@ -92,7 +92,7 @@ public class PTOperator implements java.io.Serializable
     {
       this.logicalStream = logicalStream;
       this.target = target;
-      StackTracer.logStack(PartitionLogger.logger);
+      StackTracer.logStack("assign partition to PTInput.",PartitionLogger.logger);
       this.partitions = partitions;
       this.source = source;
       this.portName = portName;

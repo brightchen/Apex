@@ -1,4 +1,4 @@
-============================PTInput() Call Stack========================================
+-------------------------------set partitions to PTInput() Call Stack-------------------------------
 at com.datatorrent.stram.plan.physical.PTOperator$PTInput.<init>(PTOperator.java:95)
 	at com.datatorrent.stram.plan.physical.StreamMapping.setInput(StreamMapping.java:349)
 	at com.datatorrent.stram.plan.physical.StreamMapping.redoMapping(StreamMapping.java:322)
@@ -11,4 +11,15 @@ at com.datatorrent.stram.plan.physical.PTOperator$PTInput.<init>(PTOperator.java
 	at com.datatorrent.stram.StramLocalCluster.<init>(StramLocalCluster.java:303)
 	at com.datatorrent.stram.LocalModeImpl.getController(LocalModeImpl.java:64)
 	at cg.dt.malharlib.PartitionAppTester.test(PartitionAppTester.java:42)
-============================PTInput() Call Stack========================================
+============================set partitions to PTInput() Call Stack========================================
+
+
+-------------------------------read partitions to PTInput Call Stack-------------------------------
+at com.datatorrent.stram.StreamingContainerAgent.getDeployInfoList(StreamingContainerAgent.java:243)
+	at com.datatorrent.stram.StreamingContainerManager.getHeartbeatResponse(StreamingContainerManager.java:1756)
+	at com.datatorrent.stram.StreamingContainerManager.processHeartbeat(StreamingContainerManager.java:1695)
+	at com.datatorrent.stram.StramLocalCluster$UmbilicalProtocolLocalImpl.processHeartbeat(StramLocalCluster.java:138)
+	at com.datatorrent.stram.engine.StreamingContainer.heartbeatLoop(StreamingContainer.java:676)
+	at com.datatorrent.stram.StramLocalCluster$LocalStreamingContainer.run(StramLocalCluster.java:177)
+	at com.datatorrent.stram.StramLocalCluster$LocalStramChildLauncher.run(StramLocalCluster.java:264)
+============================read partitions to PTInput Call Stack========================================

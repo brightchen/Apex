@@ -60,6 +60,8 @@ import com.datatorrent.bufferserver.server.Server;
 import com.datatorrent.bufferserver.storage.DiskStorage;
 import com.datatorrent.bufferserver.util.Codec;
 import com.datatorrent.common.util.ScheduledThreadPoolExecutor;
+import com.datatorrent.common.util.debug.PartitionLogger;
+import com.datatorrent.common.util.debug.StackTracer;
 import com.datatorrent.netlet.DefaultEventLoop;
 import com.datatorrent.netlet.util.Slice;
 import com.datatorrent.stram.ComponentContextPair;
@@ -1107,6 +1109,7 @@ public class StreamingContainer extends YarnContainerMain
             context.put(StreamContext.CODEC, streamCodec);
             context.put(StreamContext.EVENT_LOOP, eventloop);
             context.setPartitions(nidi.partitionMask, nidi.partitionKeys);
+            StackTracer.logStack("assign partition from InputDeployInfo to StreamContext.",PartitionLogger.logger);
             //context.setSourceId(sourceIdentifier);
             context.setSourceId(connIdentifier);
             context.setSinkId(sinkIdentifier);

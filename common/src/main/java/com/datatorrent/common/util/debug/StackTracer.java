@@ -8,13 +8,18 @@ public class StackTracer extends Exception {
 
   public static void logStack( Logger logger)
   {
+    logStack("StackTracer", logger);
+  }
+  
+  public static void logStack( String message, Logger logger)
+  {
     try
     {
       trace();
     }
     catch(StackTracer st)
     {
-      logger.info("StackTracer", st);
+      logger.info(message, st);
     }
   }
   
