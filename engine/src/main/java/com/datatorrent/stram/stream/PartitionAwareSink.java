@@ -70,11 +70,11 @@ public class PartitionAwareSink<T> implements Sink<T>
 
   private boolean canPutPayloadToOutput(T payload)
   {
-    if (serde instanceof StreamCodecWrapperForPersistance) {
-      if (!((StreamCodecWrapperForPersistance) serde).shouldCaptureEvent(payload)) {
-        return false;
-      }
-    }
+//    if (serde instanceof StreamCodecWrapperForPersistance) {
+//      if (!((StreamCodecWrapperForPersistance) serde).shouldCaptureEvent(payload)) {
+//        return false;
+//      }
+//    }
     return partitions.contains(serde.getPartition(payload) & mask);
   }
 

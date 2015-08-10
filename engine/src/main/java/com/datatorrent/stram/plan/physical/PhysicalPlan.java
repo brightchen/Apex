@@ -396,18 +396,42 @@ public class PhysicalPlan implements Serializable
               updatePersistOperatorWithSinkPartitions(persistInputPort, s.getPersistOperator(), persistCodec, portMeta);
             }
           }
-
+         
+        }
+      }
+        
+      for (OperatorMeta n : dag.getAllOperators())
+      {
+        for (StreamMeta s : n.getOutputStreams().values()) {
           // Check partitioning for persist operators per sink too
           for (Entry<InputPortMeta, InputPortMeta> entry : s.sinkSpecificPersistInputPortMap.entrySet()) {
             InputPortMeta persistInputPort = entry.getValue();
             StreamCodec codec = persistInputPort.getAttributes().get(PortContext.STREAM_CODEC);
             if (codec != null) {
               if (codec instanceof StreamCodecWrapperForPersistance) {
+                
                 StreamCodecWrapperForPersistance persistCodec = (StreamCodecWrapperForPersistance) codec;
-                updatePersistOperatorWithSinkPartitions(persistInputPort, s.sinkSpecificPersistOperatorMap.get(entry.getKey()), persistCodec, entry.getKey());
+                
+                //updatePersistOperatorWithSinkPartitions(persistInputPort, s.sinkSpecificPersistOperatorMap.get(entry.getKey()), persistCodec, entry.getKey());
+                
+                //generate the ComplexPartitionKeys 
+                Partitioner.ComplexPartitionKeys partitionKeys = new Partitioner.ComplexPartitionKeys();
+                partitionKeys.setUnionKeys( (Collection<PartitionKeys>)persistCodec.inputPortToPartitionMap.get(persistInputPort) );
+                
+                OperatorMeta persistOperatorMeta = s.sinkSpecificPersistOperatorMap.get(entry.getKey());
+                
+                Collection<PTOperator> ptOperators = getOperators(persistInputPort.getOperatorWrapper());
+                for (PTOperator p : ptOperators) {
+                  
+                  Map<InputPort<?>, PartitionKeys> keysForAllInputPort = p.getPartitionKeys();
+                  keysForAllInputPort.put(persistInputPort.getPortObject(), partitionKeys);
+                  p.setPartitionKeys(keysForAllInputPort);
+                }
+                
               }
             }
           }
+        
         }
       }
     } catch (Exception e) {
@@ -425,6 +449,7 @@ public class PhysicalPlan implements Serializable
     }
 
     persistCodec.inputPortToPartitionMap.put(sinkPortMeta, partitionKeysList);
+    
   }
 
   private void updatePersistOperatorStreamCodec(LogicalPlan dag)

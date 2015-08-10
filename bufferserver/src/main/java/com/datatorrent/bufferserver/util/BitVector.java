@@ -15,22 +15,43 @@
  */
 package com.datatorrent.bufferserver.util;
 
+import com.datatorrent.api.PartitionMatcher;
+
 /**
  * <p>BitVector class.</p>
  *
  * @since 0.3.2
  */
-public class BitVector
+public class BitVector implements PartitionMatcher
 {
-  final int mask;
-  final int bits;
+  private static final long serialVersionUID = -317303608896835405L;
+  int mask;
+  int bits;
 
+  public BitVector()
+  {
+  }
   public BitVector(int bits, int mask)
   {
     this.mask = mask;
     this.bits = bits & mask;
   }
+  
 
+  public int getMask() {
+    return mask;
+  }
+  public void setMask(int mask) {
+    this.mask = mask;
+    if( bits != 0 )
+      bits &= mask;
+  }
+  public int getBits() {
+    return bits;
+  }
+  public void setBits(int bits) {
+    this.bits = mask == 0 ? bits : mask & bits;
+  }
   @Override
   public int hashCode()
   {

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.datatorrent.api.PartitionMatcher;
 import com.datatorrent.bufferserver.internal.DataList.DataListIterator;
 import com.datatorrent.bufferserver.packet.MessageType;
 import com.datatorrent.bufferserver.packet.Tuple;
@@ -47,7 +48,7 @@ public class LogicalNode implements DataListener
   private final String upstream;
   private final String group;
   private final HashSet<PhysicalNode> physicalNodes;
-  private final HashSet<BitVector> partitions;
+  private final HashSet<PartitionMatcher> partitions;
   private final Policy policy = GiveAll.getInstance();
   private final DataListIterator iterator;
   private final long skipWindowId;
@@ -66,7 +67,7 @@ public class LogicalNode implements DataListener
     this.upstream = upstream;
     this.group = group;
     this.physicalNodes = new HashSet<PhysicalNode>();
-    this.partitions = new HashSet<BitVector>();
+    this.partitions = new HashSet<PartitionMatcher>();
 
     if (iterator instanceof DataListIterator) {
       this.iterator = (DataListIterator)iterator;
@@ -269,7 +270,7 @@ public class LogicalNode implements DataListener
                 case MessageType.PAYLOAD_VALUE:
                   Tuple tuple = Tuple.getTuple(data.buffer, data.dataOffset, data.length - data.dataOffset + data.offset);
                   int value = tuple.getPartition();
-                  for (BitVector bv : partitions) {
+                  for (PartitionMatcher bv : partitions) {
                     if (bv.matches(value)) {
                       ready = policy.distribute(physicalNodes, data);
                       break;
@@ -308,7 +309,7 @@ public class LogicalNode implements DataListener
    * @return int
    */
   @Override
-  public int getPartitions(Collection<BitVector> partitions)
+  public int getPartitions(Collection<PartitionMatcher> partitions)
   {
     partitions.addAll(this.partitions);
     return partitions.size();

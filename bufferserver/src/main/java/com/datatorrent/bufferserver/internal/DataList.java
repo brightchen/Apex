@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.datatorrent.api.PartitionMatcher;
 import com.datatorrent.bufferserver.packet.BeginWindowTuple;
 import com.datatorrent.bufferserver.packet.MessageType;
 import com.datatorrent.bufferserver.packet.ResetWindowTuple;
@@ -45,7 +46,7 @@ public class DataList
   private final int MAX_COUNT_OF_INMEM_BLOCKS;
   protected final String identifier;
   private final Integer blocksize;
-  private HashMap<BitVector, HashSet<DataListener>> listeners = new HashMap<BitVector, HashSet<DataListener>>();
+  private HashMap<PartitionMatcher, HashSet<DataListener>> listeners = new HashMap<PartitionMatcher, HashSet<DataListener>>();
   protected HashSet<DataListener> all_listeners = new HashSet<DataListener>();
   protected Block first;
   protected Block last;
@@ -304,9 +305,9 @@ public class DataList
   {
     all_listeners.add(dl);
     //logger.debug("total {} listeners {} -> {}", all_listeners.size(), dl, this);
-    ArrayList<BitVector> partitions = new ArrayList<BitVector>();
+    ArrayList<PartitionMatcher> partitions = new ArrayList<PartitionMatcher>();
     if (dl.getPartitions(partitions) > 0) {
-      for (BitVector partition : partitions) {
+      for (PartitionMatcher partition : partitions) {
         HashSet<DataListener> set;
         if (listeners.containsKey(partition)) {
           set = listeners.get(partition);
@@ -334,9 +335,9 @@ public class DataList
 
   public void removeDataListener(DataListener dl)
   {
-    ArrayList<BitVector> partitions = new ArrayList<BitVector>();
+    ArrayList<PartitionMatcher> partitions = new ArrayList<PartitionMatcher>();
     if (dl.getPartitions(partitions) > 0) {
-      for (BitVector partition : partitions) {
+      for (PartitionMatcher partition : partitions) {
         if (listeners.containsKey(partition)) {
           listeners.get(partition).remove(dl);
         }

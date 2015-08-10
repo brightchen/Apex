@@ -45,23 +45,23 @@ public class StreamCodecWrapperForPersistance<T> implements StreamCodec<T>, Seri
     return getSpecifiedStreamCodec().getPartition(o);
   }
 
-  public boolean shouldCaptureEvent(T o)
-  {
-    for (Entry<InputPortMeta, Collection<PartitionKeys>> entry : inputPortToPartitionMap.entrySet()) {
-      StreamCodec<Object> codec = codecsToMerge.get(entry.getKey());
-      Collection<PartitionKeys> partitionKeysList = entry.getValue();
-
-      for (PartitionKeys keys : partitionKeysList) {
-        if (keys.partitions.contains(keys.mask & codec.getPartition(o))) {
-          // Then at least one of the partitions is getting this event
-          // So send the event to persist operator
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
+//  public boolean shouldCaptureEvent(T o)
+//  {
+//    for (Entry<InputPortMeta, Collection<PartitionKeys>> entry : inputPortToPartitionMap.entrySet()) {
+//      StreamCodec<Object> codec = codecsToMerge.get(entry.getKey());
+//      Collection<PartitionKeys> partitionKeysList = entry.getValue();
+//
+//      for (PartitionKeys keys : partitionKeysList) {
+//        if (keys.partitions.contains(keys.mask & codec.getPartition(o))) {
+//          // Then at least one of the partitions is getting this event
+//          // So send the event to persist operator
+//          return true;
+//        }
+//      }
+//    }
+//
+//    return false;
+//  }
 
   public StreamCodec<Object> getSpecifiedStreamCodec()
   {

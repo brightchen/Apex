@@ -30,6 +30,7 @@ import com.datatorrent.api.Attribute;
 import com.datatorrent.api.Attribute.AttributeMap;
 import com.datatorrent.api.Attribute.AttributeMap.DefaultAttributeMap;
 import com.datatorrent.api.Context;
+import com.datatorrent.api.Partitioner.PartitionKeys;
 import com.datatorrent.api.StreamCodec;
 
 import com.datatorrent.netlet.EventLoop;
@@ -99,20 +100,26 @@ public class StreamContext extends DefaultAttributeMap implements Context
   private String sourceId;
   private String sinkId;
   private long finishedWindowId;
-  private int mask;
-  private Set<Integer> partitions;
+//  private int mask;
+//  private Set<Integer> partitions;
   private String id;
   private String portId;
+  private PartitionKeys partitionKeys;
 
   /**
    *
    * @param mask
    * @param partitionKeys
    */
+  public void setPartitions(PartitionKeys partitionKeys)
+  {
+    this.partitionKeys = partitionKeys;
+  }
   public void setPartitions(int mask, Set<Integer> partitionKeys)
   {
-    this.mask = mask;
-    this.partitions = partitionKeys == null ? null : Collections.unmodifiableSet(partitionKeys);
+    this.partitionKeys = new PartitionKeys( mask, partitionKeys);
+//    this.mask = mask;
+//    this.partitions = partitionKeys == null ? null : Collections.unmodifiableSet(partitionKeys);
   }
 
   /**
@@ -121,7 +128,7 @@ public class StreamContext extends DefaultAttributeMap implements Context
    */
   public int getPartitionMask()
   {
-    return mask;
+    return partitionKeys.mask;
   }
 
   /**
@@ -131,7 +138,7 @@ public class StreamContext extends DefaultAttributeMap implements Context
   @SuppressWarnings("ReturnOfCollectionOrArrayField")
   public Collection<Integer> getPartitions()
   {
-    return partitions;
+    return partitionKeys.partitions;
   }
 
   public StreamContext(String id)

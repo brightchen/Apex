@@ -238,8 +238,9 @@ public class StreamingContainerAgent {
         inputInfo.sourceNodeId = sourceOutput.source.getId();
         inputInfo.sourcePortName = sourceOutput.portName;
         if (in.partitions != null && in.partitions.mask != 0) {
-          inputInfo.partitionMask = in.partitions.mask;
-          inputInfo.partitionKeys = in.partitions.partitions;
+//          inputInfo.partitionMask = in.partitions.mask;
+//          inputInfo.partitionKeys = in.partitions.partitions;
+          inputInfo.partitions = in.partitions;
         }
 
         if (sourceOutput.source.getContainer() == oper.getContainer()) {

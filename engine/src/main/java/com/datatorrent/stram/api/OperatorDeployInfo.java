@@ -25,6 +25,7 @@ import com.datatorrent.api.Attribute;
 import com.datatorrent.api.Attribute.AttributeMap;
 import com.datatorrent.api.Context.OperatorContext;
 import com.datatorrent.api.DAG.Locality;
+import com.datatorrent.api.Partitioner.PartitionKeys;
 import com.datatorrent.api.StreamCodec;
 
 /**
@@ -138,8 +139,10 @@ public class OperatorDeployInfo implements Serializable, OperatorContext
     /**
      * Partition keys for the input stream. Null w/o partitioning.
      */
-    public Set<Integer> partitionKeys;
-    public int partitionMask;
+    public PartitionKeys partitions;
+    
+//    public Set<Integer> partitionKeys;
+//    public int partitionMask;
     /**
      * Context attributes for input port
      */
@@ -154,8 +157,8 @@ public class OperatorDeployInfo implements Serializable, OperatorContext
               .append("sourceNodeId", this.sourceNodeId)
               .append("sourcePortName", this.sourcePortName)
               .append("locality", this.locality)
-              .append("partitionMask", this.partitionMask)
-              .append("partitionKeys", this.partitionKeys)
+//              .append("partitionMask", this.partitions.mask)
+//              .append("partitionKeys", this.partitions.partitions)
               .toString();
     }
 

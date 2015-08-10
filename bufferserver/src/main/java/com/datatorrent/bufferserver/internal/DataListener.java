@@ -15,6 +15,7 @@
  */
 package com.datatorrent.bufferserver.internal;
 
+import com.datatorrent.api.PartitionMatcher;
 import com.datatorrent.bufferserver.util.BitVector;
 
 import java.util.Collection;
@@ -40,6 +41,6 @@ public interface DataListener
    * @param partitions
    * @return int
    */
-  public int getPartitions(Collection<BitVector> partitions);
+  public int getPartitions(Collection<PartitionMatcher> partitions);
 
 }

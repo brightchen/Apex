@@ -16,11 +16,13 @@
 package com.datatorrent.api;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.datatorrent.api.Operator.InputPort;
+import com.datatorrent.api.Partitioner.PartitionKeys;
 import com.datatorrent.api.StatsListener.BatchedOperatorStats;
 
 /**
@@ -61,16 +63,66 @@ public interface Partitioner<T>
    */
   void partitioned(Map<Integer, Partition<T>> partitions);
 
-  public class PartitionKeys implements java.io.Serializable
+  public class ComplexPartitionKeys extends PartitionKeys
+  {
+    private static final long serialVersionUID = -5528520356086592448L;
+    private Collection< PartitionKeys > unionKeys;
+    private PartitionKeys insectKey;
+    
+    @Override
+    public boolean matches(int value)
+    {
+      if( insectKey != null && !matches( insectKey, value ) )
+        return false;
+      for( PartitionKeys key : unionKeys )  
+      {
+        if( matches( key, value ) )
+          return true;
+      }
+      return false;
+    }
+
+    protected static boolean matches( PartitionKeys keys, int value )
+    {
+      return keys.matches(value);
+    }
+
+    public void setUnionKeys(Collection<PartitionKeys> partitionKeys)
+    {
+      unionKeys = partitionKeys;
+    }
+
+
+    public void setInsectKey(PartitionKeys insectKey) {
+      this.insectKey = insectKey;
+    }
+    
+    
+  }
+  
+  public class PartitionKeys implements PartitionMatcher
   {
     private static final long serialVersionUID = 201312271835L;
     final public int mask;
     final public Set<Integer> partitions;
-
+    
+    protected PartitionKeys()
+    {
+      mask=0;
+      partitions = Collections.emptySet();
+    }
+    //public PartitionMatcher partionMatcher;
     public PartitionKeys(int mask, Set<Integer> partitions)
     {
       this.mask = mask;
       this.partitions = partitions;
+    }
+    
+
+    @Override
+    public boolean matches(int value)
+    {
+      return partitions.contains( value & mask );
     }
 
     @Override

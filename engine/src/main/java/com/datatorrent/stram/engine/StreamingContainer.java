@@ -1107,7 +1107,7 @@ public class StreamingContainer extends YarnContainerMain
             context.setPortId(nidi.portName);
             context.put(StreamContext.CODEC, streamCodec);
             context.put(StreamContext.EVENT_LOOP, eventloop);
-            context.setPartitions(nidi.partitionMask, nidi.partitionKeys);
+            context.setPartitions(nidi.partitions);
             //context.setSourceId(sourceIdentifier);
             context.setSourceId(connIdentifier);
             context.setSinkId(sinkIdentifier);
@@ -1177,17 +1177,18 @@ public class StreamingContainer extends YarnContainerMain
             }
 
             /* here everything should be multisink capable */
-            if (nidi.partitionKeys == null || nidi.partitionKeys.isEmpty() || !(streamCodec instanceof StreamCodecWrapperForPersistance)) {
-              ((Stream.MultiSinkCapableStream) pair.component).setSink(sinkIdentifier, stream);
-            }
-            else {
-              /*
-               * generally speaking we do not have partitions on the inline streams so the control should not
-               * come here but if it comes, then we are ready to handle it using the partition aware streams.
-               */
-              PartitionAwareSink<Object> pas = new PartitionAwareSink<Object>(streamCodec == null ? nonSerializingStreamCodec : (StreamCodec<Object>) streamCodec, nidi.partitionKeys, nidi.partitionMask, stream);
-              ((Stream.MultiSinkCapableStream) pair.component).setSink(sinkIdentifier, pas);
-            }
+            ((Stream.MultiSinkCapableStream) pair.component).setSink(sinkIdentifier, stream);
+//            if (nidi.partitions.isEmpty() || !(streamCodec instanceof StreamCodecWrapperForPersistance)) {
+//              ((Stream.MultiSinkCapableStream) pair.component).setSink(sinkIdentifier, stream);
+//            }
+//            else {
+//              /*
+//               * generally speaking we do not have partitions on the inline streams so the control should not
+//               * come here but if it comes, then we are ready to handle it using the partition aware streams.
+//               */
+//              PartitionAwareSink<Object> pas = new PartitionAwareSink<Object>(streamCodec == null ? nonSerializingStreamCodec : (StreamCodec<Object>) streamCodec, nidi.partitionKeys, nidi.partitionMask, stream);
+//              ((Stream.MultiSinkCapableStream) pair.component).setSink(sinkIdentifier, pas);
+//            }
 
             String streamSinkId = pair.context.getSinkId();
             if (streamSinkId == null) {

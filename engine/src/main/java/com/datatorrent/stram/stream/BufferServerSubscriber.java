@@ -297,12 +297,12 @@ public class BufferServerSubscriber extends Subscriber implements ByteCounterStr
               if (statefulSerde == null) {
                 o = serde.fromByteArray(data.getData());
   
-                if (serde instanceof StreamCodecWrapperForPersistance) {
-                  StreamCodecWrapperForPersistance wrapperCodec = (StreamCodecWrapperForPersistance) serde;
-                  if (!wrapperCodec.shouldCaptureEvent(o)) {
-                    skipObject = true;
-                  }
-                }
+//                if (serde instanceof StreamCodecWrapperForPersistance) {
+//                  StreamCodecWrapperForPersistance wrapperCodec = (StreamCodecWrapperForPersistance) serde;
+//                  if (!wrapperCodec.shouldCaptureEvent(o)) {
+//                    skipObject = true;
+//                  }
+//                }
               } else {
                 dsp.data = data.getData();
                 o = statefulSerde.fromDataStatePair(dsp);
